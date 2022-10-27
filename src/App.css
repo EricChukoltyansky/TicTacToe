@@ -8,6 +8,10 @@
   align-items: center;
   flex-direction: column;
   font-family: "Fuzzy Bubbles", cursive;
+  background-image: url("https://images.unsplash.com/photo-1602632003094-0494b73b7c4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
+  background-size: cover;
+  background-position: center;
+  
 }
 
 body {

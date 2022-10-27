@@ -7,10 +7,10 @@ const Board = styled.div`
   width: 500px;
   height: 500px;
   background-color: #080808;
-  /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
   margin-bottom: 50px;
+  opacity: 0.8;
 `;
 
 const Row = styled.div`
@@ -45,6 +45,7 @@ function App() {
   const [rows, setRows] = useState(3);
   const [columns, setColumns] = useState(3);
   const [winner, setWinner] = useState("");
+  const [disabled, setDisabled] = useState(false);
   const [winnerCounts, setWinnerCounts] = useState({
     X: 0,
     O: 0,
@@ -107,7 +108,7 @@ function App() {
           <h3>O count: {winnerCounts.O}</h3>
         </span>
       </div>
-      <Board>
+      <Board disabled={disabled}>
         {Array(rows)
           .fill("")
           .map((row, rowIndex) => (
