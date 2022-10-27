@@ -11,18 +11,21 @@ const Board = styled.div`
   flex-direction: column;
   margin-bottom: 50px;
   opacity: 0.8;
+
+  @media (max-width: 500px) {
+    width: 300px;
+    height: 500px;
+  }
 `;
 
 const Row = styled.div`
   flex: 33%;
   display: flex;
   flex-direction: row;
-  /* border: 1px solid black; */
 `;
 
 const Column = styled.div`
   flex: 33%;
-  /* border: 1px solid black; */
   flex-direction: column;
 `;
 
@@ -85,6 +88,10 @@ function App() {
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           setWinner(`${board[a]} is the winner!`);
           winnerCount.current[board[a]] += 1;
+          // setWinnerCounts({
+          //   ...winnerCounts,
+          //   [board[a]]: winnerCounts[board[a]] + 1,
+          // });
         } else if (!board.includes("")) {
           setWinner("It's a tie!");
         }
