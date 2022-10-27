@@ -7,9 +7,10 @@ const Board = styled.div`
   width: 500px;
   height: 500px;
   background-color: aquamarine;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
+  margin-bottom: 50px;
 `;
 
 const Row = styled.div`
@@ -25,14 +26,30 @@ const Column = styled.div`
   flex-direction: column;
 `;
 
+const Winner = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  height: 50px;
+  block-size: fit-content;
+  position: absolute;
+  top: 80%;
+`;
+
 function App() {
   const [board, setBoard] = useState(Array(9).fill(""));
-  // const [squareIndex, setSquareIndex] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  const [squareIndex, setSquareIndex] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   const [player, setPlayer] = useState("X");
-  // const [rows, setRows] = useState(3);
-  // const [columns, setColumns] = useState(3);
+  const [rows, setRows] = useState(3);
+  const [columns, setColumns] = useState(3);
   const [winner, setWinner] = useState("");
-  const [gameOver, setGameOver] = useState(false);
+  // const [gameOver, setGameOver] = useState(false);
+  const [winnerCounts, setWinnerCounts] = useState({
+    X: 0,
+    O: 0,
+  });
 
   const handleSquare = (index) => {
     const newBoard = [...board];
@@ -45,7 +62,7 @@ function App() {
     setBoard(Array(9).fill(""));
     setPlayer("X");
     setWinner("");
-    setGameOver(false);
+    // setGameOver(false);
   };
 
   useEffect(() => {
@@ -61,15 +78,17 @@ function App() {
         [2, 4, 6],
       ];
 
+      console.log("board", board);
+
       winningCombos.forEach((combo) => {
         const [a, b, c] = combo;
         console.log(player);
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           setWinner(`${board[a]} is the winner!`);
-          setGameOver(true);
+          // setGameOver(true);
         } else if (!board.includes("")) {
           setWinner("It's a tie!");
-          setGameOver(true);
+          // setGameOver(true);
         }
       });
     };
@@ -78,7 +97,7 @@ function App() {
   return (
     <div className="App">
       <Board>
-        <Row>
+        {/* <Row>
           <Column>
             <Square value={board[0]} chooseSquare={() => handleSquare(0)} />
             <Square value={board[1]} chooseSquare={() => handleSquare(1)} />
@@ -94,14 +113,36 @@ function App() {
             <Square value={board[7]} chooseSquare={() => handleSquare(7)} />
             <Square value={board[8]} chooseSquare={() => handleSquare(8)} />
           </Column>
-        </Row>
+        </Row> */}
+        {Array(rows)
+          .fill("")
+          .map((row, rowIndex) => (
+            <Row>
+              {Array(columns)
+                .fill("")
+                .map((column, columnIndex) => (
+                  <Column>
+                    <Square
+                      value={
+                        board[squareIndex[rowIndex * columns + columnIndex]]
+                      }
+                      chooseSquare={() =>
+                        handleSquare(
+                          squareIndex[rowIndex * columns + columnIndex]
+                        )
+                      }
+                    />
+                  </Column>
+                ))}
+            </Row>
+          ))}
       </Board>
       {winner && (
-        <div>
+        <Winner>
           <h1>{winner}</h1>
-        </div>
+          <button onClick={handleGameOver}>Play Again</button>
+        </Winner>
       )}
-      {gameOver && <button onClick={handleGameOver}>Play Again</button>}
     </div>
   );
 }

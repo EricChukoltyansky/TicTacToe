@@ -8,7 +8,7 @@ const Squared = styled.div`
   cursor: pointer;
   display: grid;
   place-items: center;
-  font-size: 2rem;
+  font-size: 5rem;
   color: black;
   font-family: Arial, Helvetica, sans-serif;
 
