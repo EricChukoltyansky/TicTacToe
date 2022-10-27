@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Square from "./Components/Square";
 
@@ -40,16 +40,16 @@ const Winner = styled.div`
 
 function App() {
   const [board, setBoard] = useState(Array(9).fill(""));
-  const [squareIndex, setSquareIndex] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   const [player, setPlayer] = useState("X");
-  const [rows, setRows] = useState(3);
-  const [columns, setColumns] = useState(3);
   const [winner, setWinner] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const [winnerCounts, setWinnerCounts] = useState({
+
+  const winnerCount = useRef({
     X: 0,
     O: 0,
   });
+  const indexRef = useRef([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  const rowsRef = useRef(3);
+  const columnsRef = useRef(3);
 
   const handleSquare = (index) => {
     const newBoard = [...board];
@@ -84,10 +84,7 @@ function App() {
         console.log(player);
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           setWinner(`${board[a]} is the winner!`);
-          setWinnerCounts({
-            ...winnerCounts,
-            [board[a]]: winnerCounts[board[a]] + 1,
-          });
+          winnerCount.current[board[a]] += 1;
         } else if (!board.includes("")) {
           setWinner("It's a tie!");
         }
@@ -102,31 +99,41 @@ function App() {
       </div>
       <div>
         <span>
-          <h3>X count: {winnerCounts.X}</h3>
+          <h3>X count: {winnerCount.current.X}</h3>
         </span>
         <span>
-          <h3>O count: {winnerCounts.O}</h3>
+          <h3>O count: {winnerCount.current.O}</h3>
         </span>
       </div>
-      <Board disabled={disabled}>
-        {Array(rows)
+      <Board>
+        {Array(rowsRef.current)
           .fill("")
           .map((row, rowIndex) => (
             <Row key={rowIndex}>
-              {Array(columns)
+              {Array(columnsRef.current)
                 .fill("")
                 .map((column, columnIndex) => (
                   <Column key={columnIndex}>
                     <Square
                       value={
-                        board[squareIndex[rowIndex * columns + columnIndex]]
+                        board[
+                          indexRef.current[
+                            rowIndex * columnsRef.current + columnIndex
+                          ]
+                        ]
                       }
                       chooseSquare={() =>
                         handleSquare(
-                          squareIndex[rowIndex * columns + columnIndex]
+                          indexRef.current[
+                            rowIndex * columnsRef.current + columnIndex
+                          ]
                         )
                       }
-                      key={squareIndex[rowIndex * columns + columnIndex]}
+                      key={
+                        indexRef.current[
+                          rowIndex * columnsRef.current + columnIndex
+                        ]
+                      }
                     />
                   </Column>
                 ))}
