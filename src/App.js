@@ -6,7 +6,7 @@ import Square from "./Components/Square";
 const Board = styled.div`
   width: 500px;
   height: 500px;
-  background-color: aquamarine;
+  background-color: #080808;
   /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@ const Winner = styled.div`
   height: 50px;
   block-size: fit-content;
   position: absolute;
-  top: 80%;
+  top: 85%;
 `;
 
 function App() {
@@ -45,7 +45,6 @@ function App() {
   const [rows, setRows] = useState(3);
   const [columns, setColumns] = useState(3);
   const [winner, setWinner] = useState("");
-  // const [gameOver, setGameOver] = useState(false);
   const [winnerCounts, setWinnerCounts] = useState({
     X: 0,
     O: 0,
@@ -62,7 +61,6 @@ function App() {
     setBoard(Array(9).fill(""));
     setPlayer("X");
     setWinner("");
-    // setGameOver(false);
   };
 
   useEffect(() => {
@@ -85,10 +83,12 @@ function App() {
         console.log(player);
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           setWinner(`${board[a]} is the winner!`);
-          // setGameOver(true);
+          setWinnerCounts({
+            ...winnerCounts,
+            [board[a]]: winnerCounts[board[a]] + 1,
+          });
         } else if (!board.includes("")) {
           setWinner("It's a tie!");
-          // setGameOver(true);
         }
       });
     };
@@ -96,32 +96,26 @@ function App() {
   }, [board, player]);
   return (
     <div className="App">
+      <div>
+        <h2>Player {player}'s turn</h2>
+      </div>
+      <div>
+        <span>
+          <h3>X count: {winnerCounts.X}</h3>
+        </span>
+        <span>
+          <h3>O count: {winnerCounts.O}</h3>
+        </span>
+      </div>
       <Board>
-        {/* <Row>
-          <Column>
-            <Square value={board[0]} chooseSquare={() => handleSquare(0)} />
-            <Square value={board[1]} chooseSquare={() => handleSquare(1)} />
-            <Square value={board[2]} chooseSquare={() => handleSquare(2)} />
-          </Column>
-          <Column>
-            <Square value={board[3]} chooseSquare={() => handleSquare(3)} />
-            <Square value={board[4]} chooseSquare={() => handleSquare(4)} />
-            <Square value={board[5]} chooseSquare={() => handleSquare(5)} />
-          </Column>
-          <Column>
-            <Square value={board[6]} chooseSquare={() => handleSquare(6)} />
-            <Square value={board[7]} chooseSquare={() => handleSquare(7)} />
-            <Square value={board[8]} chooseSquare={() => handleSquare(8)} />
-          </Column>
-        </Row> */}
         {Array(rows)
           .fill("")
           .map((row, rowIndex) => (
-            <Row>
+            <Row key={rowIndex}>
               {Array(columns)
                 .fill("")
                 .map((column, columnIndex) => (
-                  <Column>
+                  <Column key={columnIndex}>
                     <Square
                       value={
                         board[squareIndex[rowIndex * columns + columnIndex]]
@@ -131,6 +125,7 @@ function App() {
                           squareIndex[rowIndex * columns + columnIndex]
                         )
                       }
+                      key={squareIndex[rowIndex * columns + columnIndex]}
                     />
                   </Column>
                 ))}

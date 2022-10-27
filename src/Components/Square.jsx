@@ -4,16 +4,17 @@ import styled from "styled-components";
 const Squared = styled.div`
   flex: 33%;
   height: 165px;
-  border: 1px solid black;
+  border: 1px solid #fff;
   cursor: pointer;
   display: grid;
   place-items: center;
   font-size: 5rem;
-  color: black;
+  color: #fff;
   font-family: Arial, Helvetica, sans-serif;
 
   &:active {
-    background-color: #64f4c4;
+    transition: 0.2s;
+    background-color: #fff;
   }
 `;
 
